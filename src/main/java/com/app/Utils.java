@@ -13,20 +13,18 @@ import java.io.IOException;
 public class Utils {
 
     static void convertCsvToParquet(String csvPath, String parquetPath) {
-
         SparkSession spark = SparkSession.builder().appName("My App").config("spark.master", "local").getOrCreate();
         Dataset<Row> df = spark.read().csv(csvPath);
         df.write().parquet(parquetPath);
-
     }
 
-    static void showRootHDFS() throws IOException {
+    static void showFiles(String rootPath, String targetPath) throws IOException {
 
         Configuration conf = new Configuration();
-        conf.set("fs.defaultFS","hdfs://localhost:8020");
+        conf.set("fs.defaultFS", rootPath);
         FileSystem fs = FileSystem.get(conf);
 
-        FileStatus[] fsStatus = fs.listStatus(new Path("/user/admin"));
+        FileStatus[] fsStatus = fs.listStatus(new Path(targetPath));
         for (FileStatus status : fsStatus) {
             System.out.println(status.getPath().toString());
         }
