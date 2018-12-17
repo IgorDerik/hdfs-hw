@@ -17,6 +17,13 @@ public class Utils {
 //        Dataset<Row> df = spark.read().csv(csvPath);
         Dataset<Row> df = spark.read().format("csv").option("header", "true").load(csvPath);
         df.write().parquet(parquetPath);
+//        df.show();
+    }
+
+    static void printParquetContent(String pathToFile) {
+        SparkSession spark = SparkSession.builder().appName("My App").config("spark.master", "local").getOrCreate();
+        Dataset<Row> df = spark.read().format("csv").option("header", "true").load(pathToFile);
+        df.show();
     }
 
     static void showFiles(String rootPath, String targetPath) throws IOException {
@@ -29,6 +36,7 @@ public class Utils {
         for (FileStatus status : fsStatus) {
             System.out.println(status.getPath().toString());
         }
+
     }
 
 }
