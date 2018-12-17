@@ -22,7 +22,7 @@ public class Utils {
 
     static void printParquetContent(String pathToFile) {
         SparkSession spark = SparkSession.builder().appName("My App").config("spark.master", "local").getOrCreate();
-        Dataset<Row> df = spark.read().format("csv").option("header", "true").load(pathToFile);
+        Dataset<Row> df = spark.read().parquet(pathToFile);
         df.show();
     }
 
