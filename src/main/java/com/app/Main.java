@@ -7,9 +7,7 @@ public class Main {
     public static void main(String[] args) {
 //        System.setProperty("hadoop.home.dir","C:\\hadoop" );
 
-//        Utils.convertCsvToParquet(args[0],args[1]);
-
-        Utils.printParquetContent(args[0]);
+        Utils.convertCsvToParquet(args[0],args[1]);
 
     /*
         try {

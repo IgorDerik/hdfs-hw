@@ -17,7 +17,6 @@ public class Utils {
 //        Dataset<Row> df = spark.read().csv(csvPath);
         Dataset<Row> df = spark.read().format("csv").option("header", "true").load(csvPath);
         df.write().parquet(parquetPath);
-//        df.show();
     }
 
     static void printParquetContent(String pathToFile) {
