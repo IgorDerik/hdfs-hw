@@ -14,7 +14,8 @@ public class Utils {
 
     static void convertCsvToParquet(String csvPath, String parquetPath) {
         SparkSession spark = SparkSession.builder().appName("My App").config("spark.master", "local").getOrCreate();
-        Dataset<Row> df = spark.read().csv(csvPath);
+//        Dataset<Row> df = spark.read().csv(csvPath);
+        Dataset<Row> df = spark.read().format("csv").option("header", "true").load(csvPath);
         df.write().parquet(parquetPath);
     }
 
