@@ -24,11 +24,26 @@
                     </descriptorRefs>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <!-- -->
 
     <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.5</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.parquet/parquet-hadoop-bundle -->
         <dependency>
@@ -65,11 +80,11 @@
             <version>1.8.2</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-sql -->
+        <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client -->
         <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_2.11</artifactId>
-            <version>2.3.2</version>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>3.1.1</version>
         </dependency>
 
     </dependencies>
