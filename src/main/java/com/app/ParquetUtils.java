@@ -7,11 +7,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.avro.AvroParquetReader;
@@ -42,37 +42,25 @@ public class ParquetUtils {
 
         try (
                 Reader reader = Files.newBufferedReader(Paths.get(csvPath));
-//                CSVParser csvFileParser = CSVParser.parse(new File(csvPath), csvFileFormat);
-                CSVParser csvParser = CSVParser.parse(reader,CSVFormat.DEFAULT
-                        .withFirstRecordAsHeader()
-                        .withIgnoreHeaderCase()
-                        .withTrim());
-
-                /*
-                CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
-                        .withFirstRecordAsHeader()
-                        .withIgnoreHeaderCase()
-                        .withTrim());
-                */
+//                CSVReader csvReader = new CSVReader(reader);
+                CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build();
         ) {
+            String[] nextRecord;
 
-            for (CSVRecord csvRecord : csvParser) {
+            while ((nextRecord = csvReader.readNext()) != null) {
                 record = new GenericData.Record(schema);
 
-                for (int i=0; i<csvRecord.size(); i++) {
+                for (int i=0; i<nextRecord.length; i++) {
 
                     if (schema.getFields().get(i).schema().getType() == Schema.Type.INT) {
-                        record.put(i, Integer.parseInt(csvRecord.get(i)));
+                        record.put(i, Integer.parseInt(nextRecord[i]));
                     } else {
-                        record.put(i,csvRecord.get(i));
+                        record.put(i,nextRecord[i]);
                     }
-
                 }
-
                 recordList.add(record);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
