@@ -42,10 +42,18 @@ public class ParquetUtils {
 
         try (
                 Reader reader = Files.newBufferedReader(Paths.get(csvPath));
+//                CSVParser csvFileParser = CSVParser.parse(new File(csvPath), csvFileFormat);
+                CSVParser csvParser = CSVParser.parse(reader,CSVFormat.DEFAULT
+                        .withFirstRecordAsHeader()
+                        .withIgnoreHeaderCase()
+                        .withTrim());
+
+                /*
                 CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
                         .withFirstRecordAsHeader()
                         .withIgnoreHeaderCase()
                         .withTrim());
+                */
         ) {
 
             for (CSVRecord csvRecord : csvParser) {
