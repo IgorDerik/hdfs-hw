@@ -105,7 +105,7 @@ public class ParquetUtils {
         }
     }
 
-    public static void readParquetFile(String parquetFilePath) {
+    public static void readParquetFile(String parquetFilePath, int maxRows) {
         ParquetReader<GenericData.Record> reader = null;
 
         Path path = new Path(parquetFilePath);
@@ -115,8 +115,11 @@ public class ParquetUtils {
                     .withConf(new Configuration())
                     .build();
             GenericData.Record record;
-            while ((record = reader.read()) != null) {
+
+            int i = maxRows;
+            while ( ((record = reader.read()) != null) && i>0 ) {
                 System.out.println(record);
+                i--;
             }
         }catch(IOException e) {
             e.printStackTrace();
