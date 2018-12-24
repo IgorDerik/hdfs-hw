@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
@@ -36,16 +34,55 @@ public class ParquetUtils {
         return schema;
     }
 
-    public static List<GenericData.Record> getRecords(Schema schema, String csvPath) {
-        List<GenericData.Record> recordList = new ArrayList<>();
+    public static void testCSVReader(String csvPath, int maxRows) {
+
+        try (
+                Reader reader = Files.newBufferedReader(Paths.get(csvPath));
+                CSVReader csvReader = new CSVReader(reader);
+//                CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build();
+        ) {
+
+            int i = maxRows;
+            String[] nextRecord;
+
+            while ( ((nextRecord = csvReader.readNext()) != null) && i>0 ) {
+
+                for(String s : nextRecord) {
+                    System.out.print(s+" ");
+                }
+                System.out.println();
+
+                i--;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void writeToParquet(Schema schema, String csvPath, String parquetPath) {
+
+        Path path = new Path(parquetPath);
+        ParquetWriter<GenericData.Record> writer = null;
         GenericData.Record record;
 
         try (
                 Reader reader = Files.newBufferedReader(Paths.get(csvPath));
-//                CSVReader csvReader = new CSVReader(reader);
                 CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build();
         ) {
             String[] nextRecord;
+
+            writer = AvroParquetWriter.
+                    <GenericData.Record>builder(path)
+                    .withRowGroupSize(ParquetWriter.DEFAULT_BLOCK_SIZE)
+                    .withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
+                    .withSchema(schema)
+                    .withConf(new Configuration())
+                    .withCompressionCodec(CompressionCodecName.SNAPPY)
+                    .withValidation(false)
+                    .withDictionaryEncoding(false)
+                    .build();
 
             while ((nextRecord = csvReader.readNext()) != null) {
                 record = new GenericData.Record(schema);
@@ -58,39 +95,11 @@ public class ParquetUtils {
                         record.put(i,nextRecord[i]);
                     }
                 }
-                recordList.add(record);
+                writer.write(record);
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        return recordList;
-    }
-
-    public static void writeToParquet(List<GenericData.Record> recordList, Schema schema, String parquetPath) {
-
-        Path path = new Path(parquetPath);
-        ParquetWriter<GenericData.Record> writer = null;
-        // Creating ParquetWriter using builder
-        try {
-            writer = AvroParquetWriter.
-                    <GenericData.Record>builder(path)
-                    .withRowGroupSize(ParquetWriter.DEFAULT_BLOCK_SIZE)
-                    .withPageSize(ParquetWriter.DEFAULT_PAGE_SIZE)
-                    .withSchema(schema)
-                    .withConf(new Configuration())
-                    .withCompressionCodec(CompressionCodecName.SNAPPY)
-                    .withValidation(false)
-                    .withDictionaryEncoding(false)
-                    .build();
-
-            for (GenericData.Record record : recordList) {
-                writer.write(record);
-            }
-
-        }catch(IOException e) {
-            e.printStackTrace();
-        }finally {
+        } finally {
             if(writer != null) {
                 try {
                     writer.close();

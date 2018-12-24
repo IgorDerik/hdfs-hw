@@ -8,6 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
 /*
+        ParquetUtils.testCSVReader("src/main/resources/test.csv",100);
         Schema schema = ParquetUtils.parseSchema("src/main/resources/t50.avsc");
         List<GenericData.Record> recordList = ParquetUtils.getRecords(schema,"src/main/resources/t50.csv");
         ParquetUtils.writeToParquet(recordList,schema,"src/main/resources/t50.parquet");
@@ -15,9 +16,10 @@ public class Main {
 */
 
         Schema schema = ParquetUtils.parseSchema(args[0]);
-        List<GenericData.Record> recordList = ParquetUtils.getRecords(schema,args[1]);
-        ParquetUtils.writeToParquet(recordList,schema,args[2]);
-        ParquetUtils.readParquetFile(args[3],Integer.parseInt(args[4]));
+
+        ParquetUtils.writeToParquet(schema,args[1],args[2]);
+
+        ParquetUtils.readParquetFile(args[2],Integer.parseInt(args[3]));
 
     }
 
