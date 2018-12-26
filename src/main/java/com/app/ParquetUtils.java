@@ -10,6 +10,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.avro.AvroParquetReader;
@@ -32,33 +33,6 @@ public class ParquetUtils {
         }
 
         return schema;
-    }
-
-    public static void testCSVReader(String csvPath, int maxRows) {
-
-        try (
-                Reader reader = Files.newBufferedReader(Paths.get(csvPath));
-                CSVReader csvReader = new CSVReader(reader);
-//                CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build();
-        ) {
-
-            int i = maxRows;
-            String[] nextRecord;
-
-            while ( ((nextRecord = csvReader.readNext()) != null) && i>0 ) {
-
-                for(String s : nextRecord) {
-                    System.out.print(s+" ");
-                }
-                System.out.println();
-
-                i--;
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public static void writeToParquet(Schema schema, String csvPath, String parquetPath) {
@@ -91,11 +65,13 @@ public class ParquetUtils {
 
                     Schema.Type type = schema.getFields().get(i).schema().getType();
 
+                    boolean isNumber = NumberUtils.isNumber(nextRecord[i]);
+
                     if (type == Schema.Type.INT) {
-                        int putRecord = nextRecord[i].isEmpty() ? 0 : Integer.parseInt(nextRecord[i]);
+                        int putRecord = isNumber ? Integer.parseInt(nextRecord[i]) : 0;
                         record.put(i, putRecord);
                     } else if (type == Schema.Type.DOUBLE) {
-                        double putRecord = nextRecord[i].isEmpty() ? 0.0d : Double.parseDouble(nextRecord[i]);
+                        double putRecord = isNumber ? Double.parseDouble(nextRecord[i]) : 0.0d;
                         record.put(i, putRecord);
                     } else {
                         record.put(i,nextRecord[i]);
