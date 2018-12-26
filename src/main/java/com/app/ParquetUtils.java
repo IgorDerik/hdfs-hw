@@ -89,10 +89,14 @@ public class ParquetUtils {
 
                 for (int i=0; i<nextRecord.length; i++) {
 
-                    if (schema.getFields().get(i).schema().getType() == Schema.Type.INT) {
-                        record.put(i, Integer.parseInt(nextRecord[i]));
-                    } else if (schema.getFields().get(i).schema().getType() == Schema.Type.DOUBLE) {
-                        record.put(i, Double.parseDouble(nextRecord[i]));
+                    Schema.Type type = schema.getFields().get(i).schema().getType();
+
+                    if (type == Schema.Type.INT) {
+                        int putRecord = nextRecord[i].isEmpty() ? 0 : Integer.parseInt(nextRecord[i]);
+                        record.put(i, putRecord);
+                    } else if (type == Schema.Type.DOUBLE) {
+                        double putRecord = nextRecord[i].isEmpty() ? 0.0d : Double.parseDouble(nextRecord[i]);
+                        record.put(i, putRecord);
                     } else {
                         record.put(i,nextRecord[i]);
                     }
