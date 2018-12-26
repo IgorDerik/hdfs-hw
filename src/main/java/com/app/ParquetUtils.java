@@ -70,10 +70,19 @@ public class ParquetUtils {
                     if (type == Schema.Type.INT) {
                         int putRecord = isNumber ? Integer.parseInt(nextRecord[i]) : 0;
                         record.put(i, putRecord);
-                    } else if (type == Schema.Type.DOUBLE) {
+                    }
+
+                    if (type == Schema.Type.DOUBLE) {
                         double putRecord = isNumber ? Double.parseDouble(nextRecord[i]) : 0.0d;
                         record.put(i, putRecord);
-                    } else {
+                    }
+
+                    if (type == Schema.Type.LONG) {
+                        long putRecord = isNumber ? Long.parseLong(nextRecord[i]) : 0L;
+                        record.put(i, putRecord);
+                    }
+
+                    if (type == Schema.Type.STRING) {
                         record.put(i,nextRecord[i]);
                     }
                 }
