@@ -1,7 +1,7 @@
 {
  "type": "record",
- "name": "SampleRecords",
- "doc": "Sample Records",
+ "name": "TestRecords",
+ "doc": "Test Records",
  "fields":
   [{
    "name": "id",
@@ -14,27 +14,27 @@
   },
   {
     "name": "site_name",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "posa_continent",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "user_location_country",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "user_location_region",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "user_location_city",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "orig_destination_distance",
-    "type": "string"
+    "type": "double"
   },
   {
     "name": "user_id",
@@ -42,15 +42,15 @@
   },
   {
     "name": "is_mobile",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "is_package",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "channel",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "srch_ci",
@@ -62,15 +62,15 @@
   },
   {
     "name": "srch_adults_cnt",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "srch_children_cnt",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "srch_rm_cnt",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "srch_destination_id",
@@ -82,15 +82,15 @@
   },
   {
     "name": "hotel_continent",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "hotel_country",
-    "type": "string"
+    "type": "int"
   },
   {
     "name": "hotel_market",
-    "type": "string"
+    "type": "int"
   }
  ]
 }
