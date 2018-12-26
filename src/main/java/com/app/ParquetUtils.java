@@ -91,6 +91,8 @@ public class ParquetUtils {
 
                     if (schema.getFields().get(i).schema().getType() == Schema.Type.INT) {
                         record.put(i, Integer.parseInt(nextRecord[i]));
+                    } else if (schema.getFields().get(i).schema().getType() == Schema.Type.DOUBLE) {
+                        record.put(i, Double.parseDouble(nextRecord[i]));
                     } else {
                         record.put(i,nextRecord[i]);
                     }
