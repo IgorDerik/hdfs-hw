@@ -3,7 +3,8 @@
  "name": "SampleRecords",
  "doc": "Sample Records",
  "fields":
-  [{
+  [
+  {
    "name": "id",
    "type": "int"
 

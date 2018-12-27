@@ -3,7 +3,8 @@
  "name": "TestRecords",
  "doc": "Test Records",
  "fields":
-  [{
+  [
+  {
    "name": "id",
    "type": "int"
 
