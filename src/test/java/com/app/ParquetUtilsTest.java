@@ -19,6 +19,11 @@ public class ParquetUtilsTest {
         assertFalse(parquetFile.exists());
         ParquetUtils.writeToParquet(schema,"src/test/resources/sample.csv",parquetFile.getPath());
         assertTrue(parquetFile.exists());
+
+        //deleting redundant files
+        File crc = new File("src/test/resources/.fileToBeCreated.parquet.crc");
+        parquetFile.delete();
+        crc.delete();
     }
 
     @Rule
@@ -27,10 +32,13 @@ public class ParquetUtilsTest {
     @Test
     public void readParquetFile() {
 
-        ParquetUtils.readParquetFile("src/test/resources/fileForRead.parquet",1);
+        ParquetUtils.readParquetFile("src/test/resources/fileForRead.parquet",5);
 
-        //TOD DO
-//        assertEquals(  "{\"id\": 0, \"hotel_cluster\": \"a\"}", systemOutRule.getLog());
+        assertEquals(  "{\"id\": 0, \"hotel_cluster\": \"a\"}\r\n" +
+                "{\"id\": 1, \"hotel_cluster\": \"b\"}\r\n" +
+                "{\"id\": 2, \"hotel_cluster\": \"c\"}\r\n" +
+                "{\"id\": 3, \"hotel_cluster\": \"d\"}\r\n" +
+                "{\"id\": 4, \"hotel_cluster\": \"e\"}\r\n", systemOutRule.getLog());
     }
 
 }

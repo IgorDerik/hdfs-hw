@@ -12,7 +12,6 @@ public class Main {
 
         ParquetUtils.readParquetFile(args[2],Integer.parseInt(args[3]));
 
-//        ParquetUtils.readParquetFile("src/test/resources/fileForRead.parquet",5);
     }
 
 }
