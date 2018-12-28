@@ -21,6 +21,11 @@ import org.apache.parquet.hadoop.metadata.CompressionCodecName;
 
 public class ParquetUtils {
 
+    /**
+     * Returns avro schema
+     * @param schemaPath path to avsc file
+     * @return Schema
+     */
     public static Schema parseSchema(String schemaPath) {
         Schema.Parser parser = new Schema.Parser();
         Schema schema = null;
@@ -35,6 +40,12 @@ public class ParquetUtils {
         return schema;
     }
 
+    /**
+     * Convert csv to parquet and write to file
+     * @param schema avro schema
+     * @param csvPath path to csv we are going to convert
+     * @param parquetPath path to parquet file that will be generated from csv
+     */
     public static void writeToParquet(Schema schema, String csvPath, String parquetPath) {
 
         Path path = new Path(parquetPath);
@@ -103,6 +114,11 @@ public class ParquetUtils {
         }
     }
 
+    /**
+     * Printing parquet contents
+     * @param parquetFilePath path to parquet file for reading
+     * @param maxRows number of maximum rows will be displayed
+     */
     public static void readParquetFile(String parquetFilePath, int maxRows) {
         ParquetReader<GenericData.Record> reader = null;
 
