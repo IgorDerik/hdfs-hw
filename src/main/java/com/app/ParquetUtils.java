@@ -47,6 +47,7 @@ public class ParquetUtils {
         ) {
             String[] nextRecord;
 
+            //Building writer
             writer = AvroParquetWriter.
                     <GenericData.Record>builder(path)
                     .withRowGroupSize(ParquetWriter.DEFAULT_BLOCK_SIZE)
@@ -67,6 +68,7 @@ public class ParquetUtils {
 
                     boolean isNumber = NumberUtils.isNumber(nextRecord[i]);
 
+                    //Detecting data type and putting appropriate record
                     if (type == Schema.Type.INT) {
                         int putRecord = isNumber ? Integer.parseInt(nextRecord[i]) : 0;
                         record.put(i, putRecord);
