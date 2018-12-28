@@ -24,17 +24,14 @@ import static org.junit.Assert.*;
 public class ParquetUtilsTest {
 
     @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Test
     public void writeToParquet() throws IOException {
 
-    //    File createdFile = folder.newFolder();
-  //      System.out.println(createdFile.getPath());
-//        System.out.println(folder.getRoot());
-
         Schema schema = ParquetUtils.parseSchema("src/test/resources/sample.avsc");
-        File parquetFile = new File("src/test/resources/fileToBeCreated.parquet");
+        //parquet file to be created in temporary folder
+        File parquetFile = new File(tempFolder.getRoot()+"\\fileToBeCreated.parquet");
         assertFalse(parquetFile.exists());
         ParquetUtils.writeToParquet(schema,"src/test/resources/sample.csv",parquetFile.getPath());
         assertTrue(parquetFile.exists());
@@ -50,15 +47,12 @@ public class ParquetUtilsTest {
         String[] csvNextRecord;
         GenericData.Record parquetNextRecord;
 
+        //comparing each record of csv and parquet files
         while (((parquetNextRecord = parquetReader.read()) != null) && ((csvNextRecord = csvReader.readNext()) != null)) {
             assertEquals(Integer.parseInt(csvNextRecord[0]), parquetNextRecord.get(0));
             assertEquals(csvNextRecord[1], parquetNextRecord.get(1).toString());
         }
 
-        //deleting redundant files
-        File crc = new File("src/test/resources/.fileToBeCreated.parquet.crc");
-        assertTrue(parquetFile.delete());
-        assertTrue(crc.delete());
     }
 
     @Rule
